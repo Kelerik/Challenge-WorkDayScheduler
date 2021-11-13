@@ -10,11 +10,11 @@ for (let hourIndex = 0; hourIndex <= 23; hourIndex++) {
     var hourText = moment(hourIndex, "H").format("ha");
 
     // declare timeblock var for the iterated hour
-    var newTimeBlock = $("<div class='row timeblock'>");
+    var newTimeBlock = $("<div class='row' id='hour-" + hourIndex + "'>");
 
     // first column: time
     newTimeBlock.append(
-        $('<div class="col-2 text-right pt-3 hour">' + hourText + "</div>")
+        $('<div class="col-2 pt-3 hour">' + hourText + "</div>")
     );
     // second column: task
     if (hourIndex < moment().format("H")) {
@@ -24,9 +24,7 @@ for (let hourIndex = 0; hourIndex <= 23; hourIndex++) {
     } else {
         var timeClass = "future";
     }
-    newTimeBlock.append(
-        $('<div class="col text-left pt-3 ' + timeClass + '"></div>')
-    );
+    newTimeBlock.append($('<div class="col pt-3 ' + timeClass + '"></div>'));
     // third column: save button
     newTimeBlock.append(
         $('<div class="col-1 saveBtn"><span class="oi oi-check"></span></div>')
