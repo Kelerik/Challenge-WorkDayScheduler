@@ -5,6 +5,36 @@ var updateTime = function () {
     // --- TODO
 };
 
+for (let hourIndex = 0; hourIndex <= 23; hourIndex++) {
+    // convert hour to more readable format ("7" becomes "7am")
+    var hourText = moment(hourIndex, "H").format("ha");
+
+    // declare timeblock var for the iterated hour
+    var newTimeBlock = $("<div class='row timeblock'>");
+
+    // first column: time
+    newTimeBlock.append(
+        $('<div class="col-2 text-right pt-3 hour">' + hourText + "</div>")
+    );
+    // second column: task
+    if (hourIndex < moment().format("H")) {
+        var timeClass = "past";
+    } else if (hourIndex == moment().format("H")) {
+        var timeClass = "present";
+    } else {
+        var timeClass = "future";
+    }
+    newTimeBlock.append(
+        $('<div class="col text-left pt-3 ' + timeClass + '"></div>')
+    );
+    // third column: save button
+    newTimeBlock.append(
+        $('<div class="col-1 saveBtn"><span class="oi oi-check"></span></div>')
+    );
+    // place element on page
+    $(".container").append(newTimeBlock);
+}
+
 // run, then update every minute
 updateTime();
 setInterval(updateTime, 60000);
