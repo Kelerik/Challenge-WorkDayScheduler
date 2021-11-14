@@ -1,3 +1,6 @@
+// array of all the scheduled events for each hour of the day
+var timeblockTexts = [];
+
 var updateTime = function () {
     // display date in the header
     $("#currentDay").text(moment().format("dddd, MMMM Do YYYY"));
@@ -10,13 +13,13 @@ for (let hourIndex = 0; hourIndex <= 23; hourIndex++) {
     var hourText = moment(hourIndex, "H").format("ha");
 
     // declare timeblock var for the iterated hour
-    var newTimeBlock = $("<div class='row' id='hour-" + hourIndex + "'>");
+    var newTimeBlock = $("<div class='row'>");
 
     // first column: time
     newTimeBlock.append(
         $('<div class="col-2 pt-3 hour">' + hourText + "</div>")
     );
-    // second column: timeblock text
+    // second column: timeblock text area
     if (hourIndex < moment().format("H")) {
         var timeClass = "past";
     } else if (hourIndex == moment().format("H")) {
@@ -26,41 +29,31 @@ for (let hourIndex = 0; hourIndex <= 23; hourIndex++) {
     }
     newTimeBlock.append(
         $(
-            '<div class="col pt-3 timeblock-text-container ' +
+            '<textarea class="col pt-3 ' +
                 timeClass +
-                '"><span class="timeblock-text"></span></div>'
+                '" id=hour-' +
+                hourIndex +
+                '" spellcheck="false"></textarea>'
         )
     );
     // third column: save button
     newTimeBlock.append(
-        $('<div class="col-1 editBtn"><span class="oi oi-pencil"></span></div>')
+        $('<div class="col-1 saveBtn"><span class="oi oi-check"></span></div>')
     );
     // place element on page
     $(".container").append(newTimeBlock);
 }
 
-// row click listener
-$(".row").on("click", function () {
-    console.log(this);
-    // search down the children tree to find the specific class
-    var timeblockArea = $(this).find(".timeblock-text");
-    // get its current text content
-    var timeblockText = timeblockArea.text().trim();
-    // create textarea element with that text inside
-    var timeblockInput = $("<textarea>").val(timeblockText);
-    // replace the text with the textarea element
-    timeblockArea.replaceWith(timeblockInput);
-    // automatically focus on it
-    timeblockInput.trigger("focus");
-    // change the edit button into a save button
-    $(this).find(".oi-pencil").removeClass("oi-pencil").addClass("oi-check");
-    $(this).find(".editBtn").removeClass("editBtn").addClass("saveBtn");
-    console.log(this);
-});
-
 // save button click listener
 $(".saveBtn").on("click", function () {
-    console.log(this);
+    // get relevant textarea element
+    var editedTimeblock = $(this).siblings("textarea");
+    // get id without the "hour-" text
+    var editedHour = editedTimeblock.attr("id").replace("hour-", "");
+    // read text from the textarea and update the array
+    timeblockTexts[editedHour] = editedTimeblock.val();
+
+    console.log(timeblockTexts);
 });
 
 // run, then update every minute
