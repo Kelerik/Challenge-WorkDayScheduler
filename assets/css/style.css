@@ -58,6 +58,7 @@ textarea {
     color: white;
 }
 
+.editBtn,
 .saveBtn {
     border-left: 1px solid black;
     border-top-right-radius: 15px;
@@ -69,10 +70,17 @@ textarea {
     align-items: center;
 }
 
-.saveBtn:hover {
-    background-color: var(--teal);
+.row:hover {
     cursor: pointer;
 }
-.saveBtn:active {
+.row:hover > .editBtn,
+.row:hover > .saveBtn {
+    background-color: var(--teal);
+}
+.row:active > .editBtn,
+.row:active > .saveBtn {
     background-color: var(--success);
+}
+textarea {
+    width: 100%;
 }

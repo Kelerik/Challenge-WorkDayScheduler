@@ -16,7 +16,7 @@ for (let hourIndex = 0; hourIndex <= 23; hourIndex++) {
     newTimeBlock.append(
         $('<div class="col-2 pt-3 hour">' + hourText + "</div>")
     );
-    // second column: task
+    // second column: timeblock text
     if (hourIndex < moment().format("H")) {
         var timeClass = "past";
     } else if (hourIndex == moment().format("H")) {
@@ -24,14 +24,44 @@ for (let hourIndex = 0; hourIndex <= 23; hourIndex++) {
     } else {
         var timeClass = "future";
     }
-    newTimeBlock.append($('<div class="col pt-3 ' + timeClass + '"></div>'));
+    newTimeBlock.append(
+        $(
+            '<div class="col pt-3 timeblock-text-container ' +
+                timeClass +
+                '"><span class="timeblock-text"></span></div>'
+        )
+    );
     // third column: save button
     newTimeBlock.append(
-        $('<div class="col-1 saveBtn"><span class="oi oi-check"></span></div>')
+        $('<div class="col-1 editBtn"><span class="oi oi-pencil"></span></div>')
     );
     // place element on page
     $(".container").append(newTimeBlock);
 }
+
+// row click listener
+$(".row").on("click", function () {
+    console.log(this);
+    // search down the children tree to find the specific class
+    var timeblockArea = $(this).find(".timeblock-text");
+    // get its current text content
+    var timeblockText = timeblockArea.text().trim();
+    // create textarea element with that text inside
+    var timeblockInput = $("<textarea>").val(timeblockText);
+    // replace the text with the textarea element
+    timeblockArea.replaceWith(timeblockInput);
+    // automatically focus on it
+    timeblockInput.trigger("focus");
+    // change the edit button into a save button
+    $(this).find(".oi-pencil").removeClass("oi-pencil").addClass("oi-check");
+    $(this).find(".editBtn").removeClass("editBtn").addClass("saveBtn");
+    console.log(this);
+});
+
+// save button click listener
+$(".saveBtn").on("click", function () {
+    console.log(this);
+});
 
 // run, then update every minute
 updateTime();
